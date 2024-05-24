@@ -1,0 +1,16 @@
+.idea/
+ignore/
+vendor/
+runtime/
+.phpintel/
+.settings/
+.env
+.env.*
+.phpunit*
+.project
+.DS_Store
+.buildpath
+*.log
+*.cache
+*.patch
+!.gitkeep
