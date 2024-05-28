@@ -11,6 +11,7 @@ use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Context\Context;
+use Hyperf\HttpServer\Server;
 use Swoole\Http\Request;
 
 /**
@@ -20,14 +21,13 @@ class RequestAspect extends AbstractAspect
 {
 
     public array $classes = [
-        \Hyperf\HttpServer\Server::class,
         'Hyperf\HttpServer\Server::onRequest',
         'Hyperf\HttpServer\CoreMiddleware::dispatch',
         'Hyperf\HttpServer\ResponseEmitter::emit',
     ];
 
     public array $annotations = [
-        \Hyperf\HttpServer\Server::class,
+        Server::class,
     ];
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
