@@ -85,8 +85,8 @@ class ConfigProvider
                 [
                     'id' => 'config',
                     'description' => 'envi',
-                    'source' => __DIR__ . '/../publish/envi.php',
-                    'destination' => BASE_PATH . '/config/autoload/envi.php',
+                    'source' => __DIR__ . '/../publish/baichuan.php',
+                    'destination' => BASE_PATH . '/config/autoload/baichuan.php',
                 ],
                 [
                     'id' => 'config',

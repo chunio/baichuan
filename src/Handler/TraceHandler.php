@@ -43,7 +43,7 @@ class TraceHandler
     public static function init(): bool
     {
         //TODO:存在其他非請求入口
-        if(config('envi.traceHandlerStatus')){
+        if(config('baichuan.traceHandlerStatus')){
             $traceId = ContextHandler::pullTraceId();
             if(!(self::$trace[$traceId] ?? [])) {
                 self::$trace[$traceId] = [//template
@@ -76,7 +76,7 @@ class TraceHandler
 
     public static function push($variable, string $label = 'default', string $event = self::EVENT['TRACE'], int $debugBacktraceLimit = 2): bool
     {
-        if(config('envi.traceHandlerStatus')){
+        if(config('baichuan.traceHandlerStatus')){
             switch ($event){
                 case self::EVENT['TRACE']:
                     $index = microtime(true) . '(' . Str::random(10) . ')';//TODO:並發時，需防止覆蓋同一指針下標
@@ -105,7 +105,7 @@ class TraceHandler
     {
 //        try {
         $traceArray = self::pull();
-        if(config('envi.traceHandlerSync2mongodb')) {
+        if(config('baichuan.traceHandlerSync2mongodb')) {
             CoroutineHandler::co(function()use(&$traceArray){
                 mongoDBHandler('trace' . date('Ymd'))->commonInsert($traceArray);
             });
@@ -114,12 +114,12 @@ class TraceHandler
             //$responseArray = json_decode($responseJson, true);
             //$responseArray['data'] = 'hide';
             //$traceArray['response'] = $responseJson;
-            if(config('envi.monologHandlerJsonEncodeStatus')) {
+            if(config('baichuan.monologHandlerJsonEncodeStatus')) {
                 $trace = UtilityHandler::prettyJsonEncode($traceArray) . "\n";
             }else{
                 $trace = "\n:<<UNIT[START]\n" . print_r($traceArray, true) . "\nUNIT[END]\n";//print_r()的換行會將大變量瞬間膨脹導致內存滿載
             }
-            if(config('envi.monologHandlerOutput')) echo $trace;
+            if(config('baichuan.monologHandlerOutput')) echo $trace;
             MonologHandler::info($trace,'', [], MonologHandler::$formatter['NONE']);
         //}
 //        } catch (Throwable $e) {
