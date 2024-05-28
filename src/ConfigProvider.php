@@ -19,36 +19,36 @@ class ConfigProvider
     {
         return [
             //合併變量
-            'logger' => [
-                'default' => [
-                    //支持「handlers」，參見：https://hyperf.wiki/2.2/#/zh-cn/logger
-                    'handler' => [
-                        //'class' => \Monolog\Handler\RotatingFileHandler::class,
-                        'class' => \Monolog\Handler\StreamHandler::class,
-                        'constructor' => [
-                            'filename' => BASE_PATH . '/runtime/logs/hyperf.log',//日誌文件
-                            'level' => \Monolog\Logger::DEBUG,
-                        ],
-                    ],
-                    'formatter' => [
-                        'class' => \Monolog\Formatter\LineFormatter::class,
-                        'constructor' => [
-                            'format' => null,
-                            'dateFormat' => 'Y-m-d H:i:s',
-                            'allowInlineLineBreaks' => true,
-                            'includeStacktraces' => true,
-                            'ignoreEmptyContextAndExtra' => true,
-                        ],
-                    ],
-                    /*****
-                    'formatter' => [
-                    //'class' => \Monolog\Formatter\JsonFormatter::class,
-                    'class' => Baichuan\Library\Component\Monolog\CustomJsonFormatter::class,
-                    'constructor' => [],
-                    ],
-                    *****/
-                ],
-            ],
+//            'logger' => [
+//                'default' => [
+//                    //支持「handlers」，參見：https://hyperf.wiki/2.2/#/zh-cn/logger
+//                    'handler' => [
+//                        //'class' => \Monolog\Handler\RotatingFileHandler::class,
+//                        'class' => \Monolog\Handler\StreamHandler::class,
+//                        'constructor' => [
+//                            'filename' => BASE_PATH . '/runtime/logs/hyperf.log',//日誌文件
+//                            'level' => \Monolog\Logger::DEBUG,
+//                        ],
+//                    ],
+//                    'formatter' => [
+//                        'class' => \Monolog\Formatter\LineFormatter::class,
+//                        'constructor' => [
+//                            'format' => null,
+//                            'dateFormat' => 'Y-m-d H:i:s',
+//                            'allowInlineLineBreaks' => true,
+//                            'includeStacktraces' => true,
+//                            'ignoreEmptyContextAndExtra' => true,
+//                        ],
+//                    ],
+//                    /*****
+//                    'formatter' => [
+//                    //'class' => \Monolog\Formatter\JsonFormatter::class,
+//                    'class' => Baichuan\Library\Component\Monolog\CustomJsonFormatter::class,
+//                    'constructor' => [],
+//                    ],
+//                    *****/
+//                ],
+//            ],
             'dependencies' => [
                 \Hyperf\Contract\StdoutLoggerInterface::class => \Baichuan\Library\Component\Monolog\StdoutLoggerFactory::class,
             ],
