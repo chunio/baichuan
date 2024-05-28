@@ -20,9 +20,14 @@ class RequestAspect extends AbstractAspect
 {
 
     public array $classes = [
+        \Hyperf\HttpServer\Server::class,
         'Hyperf\HttpServer\Server::onRequest',
         'Hyperf\HttpServer\CoreMiddleware::dispatch',
         'Hyperf\HttpServer\ResponseEmitter::emit',
+    ];
+
+    public array $annotations = [
+        \Hyperf\HttpServer\Server::class,
     ];
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
