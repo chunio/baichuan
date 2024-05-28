@@ -26,10 +26,6 @@ class RequestAspect extends AbstractAspect
         'Hyperf\HttpServer\ResponseEmitter::emit',
     ];
 
-    public array $annotations = [
-        Server::class,
-    ];
-
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
         // 記錄請求開始時間
