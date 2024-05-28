@@ -6,7 +6,7 @@ namespace Baichuan\Library\Handler;
 
 use Baichuan\Library\Constant\ContextEnum;
 use Hyperf\Context\Context;
-use Hyperf\Utils\Str;
+use Hyperf\Stringable\Str;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
