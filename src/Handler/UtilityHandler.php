@@ -9,6 +9,7 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Hyperf\Utils\ApplicationContext;
+use function Hyperf\Support\env;
 
 /**
  * Class UtilityHandler
