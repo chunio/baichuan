@@ -71,7 +71,7 @@ class JsonResource extends \Hyperf\Resource\Json\JsonResource
                 return $this->resource->toArray();
             }
         }
-        return [$this->resource];
+        return $this->resource;
         // return method_exists($this->resource, 'toArray') ? $this->resource->toArray() : [$this->resource];
     }
 
@@ -84,7 +84,7 @@ class JsonResource extends \Hyperf\Resource\Json\JsonResource
     public function with(): array
     {
         $requestStartMicroTime = Context::get(ContextEnum::RequestStartMicroTime);
-        $elapsedTime = floatval(number_format((microtime(true) - $requestStartMicroTime), 5,'.',''));
+        $elapsedTime = floatval(number_format((microtime(true) - $requestStartMicroTime), 3,'.',''));
         return [
             'status' => $this->getStatusCode(),
             'code' => $this->getAppCode(),
