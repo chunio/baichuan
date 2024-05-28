@@ -103,36 +103,14 @@ class TraceHandler
      */
     public static function output(/*string $response*/)
     {
-//        try {
         $traceArray = self::pull();
-        if(config('baichuan.traceHandlerSync2mongodb')) {
-            CoroutineHandler::co(function()use(&$traceArray){
-                mongoDBHandler('trace' . date('Ymd'))->commonInsert($traceArray);
-            });
+        if(config('baichuan.monologHandlerJsonEncodeStatus')) {
+            $trace = UtilityHandler::prettyJsonEncode($traceArray) . "\n";
+        }else{
+            $trace = "\n:<<UNIT[START]\n" . print_r($traceArray, true) . "\nUNIT[END]\n";//print_r()的換行會將大變量瞬間膨脹導致內存滿載
         }
-        //if($traceArray['trace'] || $traceArray['service']){
-            //$responseArray = json_decode($responseJson, true);
-            //$responseArray['data'] = 'hide';
-            //$traceArray['response'] = $responseJson;
-            if(config('baichuan.monologHandlerJsonEncodeStatus')) {
-                $trace = UtilityHandler::prettyJsonEncode($traceArray) . "\n";
-            }else{
-                $trace = "\n:<<UNIT[START]\n" . print_r($traceArray, true) . "\nUNIT[END]\n";//print_r()的換行會將大變量瞬間膨脹導致內存滿載
-            }
-            if(config('baichuan.monologHandlerOutput')) echo $trace;
-            MonologHandler::info($trace,'', [], MonologHandler::$formatter['NONE']);
-        //}
-//        } catch (Throwable $e) {
-//            $trace = prettyJsonEncode([
-//                'date' => date('Y-m-d H:i:s'),
-//                'traceId' => ContextHandler::pullTraceId(),
-//                'script' => $e->getFile() . "(line:{$e->getLine()})",
-//                'label' => __FUNCTION__ . "throwable",
-//                'message' => $e->getMessage(),
-//                'request' => ContextHandler::pullRequestAbstract(),
-//                'customTrace' => [],
-//            ]);
-//        }
+        if(config('baichuan.monologHandlerOutput')) echo $trace;
+        MonologHandler::info($trace,'', [], MonologHandler::$formatter['NONE']);
     }
 
     //TODO:將自動清理添加至定時器

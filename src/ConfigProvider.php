@@ -19,6 +19,7 @@ class ConfigProvider
     {
         return [
             //合併變量
+            //打開注釋將導致報錯，待調試[START]
 //            'logger' => [
 //                'default' => [
 //                    //支持「handlers」，參見：https://hyperf.wiki/2.2/#/zh-cn/logger
@@ -49,9 +50,12 @@ class ConfigProvider
 //                    *****/
 //                ],
 //            ],
-            'dependencies' => [
-                \Hyperf\Contract\StdoutLoggerInterface::class => \Baichuan\Library\Component\Monolog\StdoutLoggerFactory::class,
-            ],
+            //打開注釋將導致報錯，待調試[END]
+            //支持打開注釋，待優化[START]
+//            'dependencies' => [
+//                \Hyperf\Contract\StdoutLoggerInterface::class => \Baichuan\Library\Component\Monolog\StdoutLoggerFactory::class,
+//            ],
+            //支持打開注釋，待優化[END]
             'processes' => [//
             ],
             'commands' => [
