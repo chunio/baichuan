@@ -81,30 +81,55 @@ class UtilityHandler
 
     public static function commonHttpPost(string $uri, array $body = [], $header = ['Content-Type' => 'application/json'], array $cookieDetail = [], string $cookieDomain = '')
     {
-        $config = [
-            'timeout' => 5,
-            'headers' => $header,
-            'json' => $body,
-        ];
-        if($cookieDetail && $cookieDomain){
-            $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
+        try{
+            $config = [
+                'timeout' => 3,
+                'headers' => $header,
+                'json' => $body,
+            ];
+            if($cookieDetail && $cookieDomain){
+                $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
+            }
+            $client = new \GuzzleHttp\Client($config);
+            $result = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
+            $return = [
+                'status' => true,
+                'result' => $result
+            ];
+        }catch (\Throwable $e){
+            // 異常原因：1連接超時，...
+            $return = [
+                'status' => false,
+                'result' => $e->getMessage()
+            ];
         }
-        $client = new \GuzzleHttp\Client($config);
-        $result = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
-        return $result;
+        return $return;
     }
 
     public static function commonHttpGet(string $uri, array $query = [], array $cookieDetail = [], string $cookieDomain = '')
     {
-        $config = [
-            'query' => $query,
-        ];
-        if($cookieDetail && $cookieDomain){
-            $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
+        try{
+            $config = [
+                'timeout' => 3,
+                'query' => $query,
+            ];
+            if($cookieDetail && $cookieDomain){
+                $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
+            }
+            $client = new \GuzzleHttp\Client($config);
+            $result = json_decode((string)$client->request('GET', $uri, $config)->getBody(), true);
+            $return = [
+                'status' => true,
+                'result' => $result
+            ];
+        }catch (\Throwable $e){
+            // 異常原因：1連接超時，...
+            $return = [
+                'status' => false,
+                'result' => $e->getMessage()
+            ];
         }
-        $client = new \GuzzleHttp\Client($config);
-        $result = json_decode((string)$client->request('GET', $uri, $config)->getBody(), true);
-        return $result;
+        return $return;
     }
 
     public static function prettyJsonEncode($object, ?int $flag = JSON_PRETTY_PRINT): string
