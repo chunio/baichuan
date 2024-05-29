@@ -51,11 +51,11 @@ class ConfigProvider
 //                ],
 //            ],
             //打開注釋將導致報錯，待調試[END]
-            //支持打開注釋，待優化[START]
+            //支持打開注釋，但待優化[START]
 //            'dependencies' => [
 //                \Hyperf\Contract\StdoutLoggerInterface::class => \Baichuan\Library\Component\Monolog\StdoutLoggerFactory::class,
 //            ],
-            //支持打開注釋，待優化[END]
+            //支持打開注釋，但待優化[END]
             'processes' => [//
             ],
             'commands' => [

@@ -9,6 +9,7 @@ use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Resource\Json\JsonResource;
 use Hyperf\Resource\Response\Response;
+use ReflectionMethod;
 use function Hyperf\Config\config;
 
 /**
@@ -23,7 +24,12 @@ class TraceHandlerAspect extends AbstractAspect
 {
 
     public array $classes = [
-        'Baichuan\Library\Handler\TraceHandler::*',
+        'Baichuan\Library\Handler\TraceHandler::init',
+        'Baichuan\Library\Handler\TraceHandler::ApiElapsedTimeRank',
+        'Baichuan\Library\Handler\TraceHandler::push',
+        'Baichuan\Library\Handler\TraceHandler::output',
+        'Baichuan\Library\Handler\TraceHandler::release',
+        'Baichuan\Library\Handler\TraceHandler::refresh',
     ];
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
@@ -32,7 +38,7 @@ class TraceHandlerAspect extends AbstractAspect
         if(config('baichuan.LOG_STATUS')){
             return $proceedingJoinPoint->process();
         }else{
-            return [];
+            return false;
         }
     }
 

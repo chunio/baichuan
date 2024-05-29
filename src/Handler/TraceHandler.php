@@ -101,7 +101,7 @@ class TraceHandler
      * datetime: 2023/02/10 16:58
      * memo : response
      */
-    public static function output(/*string $response*/)
+    public static function output(/*string $response*/): bool
     {
         $traceArray = self::pull();
         if(config('baichuan.monologHandlerJsonEncodeStatus')) {
@@ -111,6 +111,7 @@ class TraceHandler
         }
         if(config('baichuan.monologHandlerOutput')) echo $trace;
         MonologHandler::info($trace,'', [], MonologHandler::$formatter['NONE']);
+        return true;
     }
 
     //TODO:將自動清理添加至定時器
