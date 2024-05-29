@@ -8,7 +8,7 @@ use Baichuan\Library\Constant\AsciiEnum;
 use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\Context\ApplicationContext;
 use function Hyperf\Support\env;
 
 /**
