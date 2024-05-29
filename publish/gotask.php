@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use Baichuan\Library\Handler\UtilityHandler;
+use function Hyperf\Support\env;
+use function Hyperf\Config\config;
 
 return [
-    'enable' => env('GOTASK_ENABLE', true),
+    'enable' => env('GOTASK_ENABLE', config('baichuan.LOG_STATUS')),
     'executable' => BASE_PATH . '/bin/app',
     'socket_address' => env('GOTASK_SOCKET_ADDR', \Hyperf\GoTask\ConfigProvider::address()),
     'go2php' => [
