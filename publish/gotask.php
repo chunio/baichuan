@@ -7,7 +7,8 @@ use function Hyperf\Support\env;
 use function Hyperf\Config\config;
 
 return [
-    'enable' => env('GOTASK_ENABLE', config('baichuan.LOG_STATUS')),
+    // 如果引入「./baichuan/publish/*.sh」的變量等，將導致循環依賴（啟動失敗）
+    'enable' => env('GOTASK_ENABLE', 0),
     'executable' => BASE_PATH . '/bin/app',
     'socket_address' => env('GOTASK_SOCKET_ADDR', \Hyperf\GoTask\ConfigProvider::address()),
     'go2php' => [
