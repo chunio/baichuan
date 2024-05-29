@@ -91,16 +91,16 @@ class UtilityHandler
                 $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
             }
             $client = new \GuzzleHttp\Client($config);
-            $result = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
+            $body = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
             $return = [
                 'status' => true,
-                'result' => $result
+                'body' => $body
             ];
         }catch (\Throwable $e){
             // 異常原因：1連接超時，...
             $return = [
                 'status' => false,
-                'result' => $e->getMessage()
+                'body' => $e->getMessage()
             ];
         }
         return $return;
@@ -117,16 +117,16 @@ class UtilityHandler
                 $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
             }
             $client = new \GuzzleHttp\Client($config);
-            $result = json_decode((string)$client->request('GET', $uri, $config)->getBody(), true);
+            $body = json_decode((string)$client->request('GET', $uri, $config)->getBody(), true);
             $return = [
                 'status' => true,
-                'result' => $result
+                'body' => $body
             ];
         }catch (\Throwable $e){
             // 異常原因：1連接超時，...
             $return = [
                 'status' => false,
-                'result' => $e->getMessage()
+                'body' => $e->getMessage()
             ];
         }
         return $return;

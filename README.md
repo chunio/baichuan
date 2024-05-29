@@ -89,6 +89,9 @@ vi ./hyperf-skeleton/composer.json
     "post-install-cmd": [
       "php ./bin/hyperf.php vendor:publish baichuan/library"
     ],
+    "post-update-cmd": [
+      "php ./bin/hyperf.php vendor:publish baichuan/library"
+    ],
     "post-autoload-dump": [
       "rm -rf runtime/container"
     ],
@@ -108,8 +111,6 @@ vi ./hyperf-skeleton/composer.json
   ]
 }
 ```
-如「./hyperf-skeleton/config/autoload/*」存在與「./baichuan/publish/*.sh」同名文件時,「composer install」將會失敗
-
 rm -rf ./hyperf-skeleton/vendor && composer install
 
 ### step 4 / 更新配置（視具體情況）

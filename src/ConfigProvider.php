@@ -85,7 +85,7 @@ class ConfigProvider
                     ],
                 ],
             ],
-            //複製文件（受限於框架啟動順序，部分基礎配置不適用於publish，如：logger.php）
+            //複製文件（1目標工程的對應文件已存在時，不會覆蓋，2受限於框架啟動順序，部分基礎配置不適用於publish（如：logger.php））
             'publish' => [
                 [
                     'id' => 'config',
