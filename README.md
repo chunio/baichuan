@@ -1,17 +1,17 @@
 # Baichuan
 ## Installation
-
-### step 1    
+### step 1 / 拉取環境
 ```
+# base centos7.9
 docker run -d --privileged --name php8370environment -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /windows:/windows --tmpfs /run --tmpfs /run/lock -p 9501:9501 chunio/php:8370 /sbin/init
 docker exec -it php8370environment /bin/bash
 ```
-### step 2
+### step 2 / 安裝框架
 ```
 TODO: archive hyperf3.1
 composer create-project hyperf/hyperf-skeleton
 ```
-### step 3
+### step 3 / 安裝依賴
 vi ./hyperf-skeleton/composer.json
 ```json
 {
@@ -89,9 +89,6 @@ vi ./hyperf-skeleton/composer.json
     "post-install-cmd": [
       "php ./bin/hyperf.php vendor:publish baichuan/library"
     ],
-    "post-update-cmd": [
-      "php ./bin/hyperf.php vendor:publish baichuan/library"
-    ],
     "post-autoload-dump": [
       "rm -rf runtime/container"
     ],
@@ -111,28 +108,15 @@ vi ./hyperf-skeleton/composer.json
   ]
 }
 ```
-composer update
+rm -rf ./hyperf-skeleton/vendor && composer install
 
-### step 4 / 调整配置
-vi ./hyperf-skeleton/config/autoload/baichuan.php
-```php
-<?php
-# example
-declare(strict_types=1);
-return [
-    // 發佈至「工程目錄」的config/autoload/baichuan.php
-    'LOG_STATUS' => 0,//TODO:是否開啟百川日誌（未完全實現「開啟/關閉」控制（返回值非布爾類型的仍會觸發，待完善）：TraceHandlerAspect >> TraceHandler），值：0否，1是
-    'traceHandlerStatus' => 1,//是否開啟鏈路跟蹤
-    'monologHandlerJsonEncodeStatus' => 1,//是否單行，值：0否，1是
-    'monologHandlerOutput' => 1,//是否輸出至控制台，值：0否，1是
-];
-```
+### step 4 / 更新配置（視具體情況）
 ```php
 //vi ./hyperf-skeleton/config/autoload/config_center.php
 // 'enable' => (bool) env('CONFIG_CENTER_ENABLE', false) //關閉配置中心（如：apollo）
 ```
 
-### step 5 
+### step 5 / 新增接口
 
 ```php
 <?php
