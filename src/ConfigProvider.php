@@ -61,9 +61,10 @@ class ConfigProvider
             'commands' => [
             ],
             'aspects' => [
+                \Baichuan\Library\Aspect\MongoAspect::class,
                 \Baichuan\Library\Aspect\RequestAspect::class,
                 \Baichuan\Library\Aspect\ResponseAspect::class,
-                \Baichuan\Library\Aspect\MongoAspect::class
+                \Baichuan\Library\Aspect\TraceHandlerAspect::class
             ],
             'listeners' => [
             ],
