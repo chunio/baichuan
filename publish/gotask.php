@@ -8,8 +8,7 @@ use function Hyperf\Config\config;
 
 return [
     'enable' => env('GOTASK_ENABLE', config('baichuan.LOG_STATUS')),
-    // 「'enable' => env('GOTASK_ENABLE', 1)」時打開注釋
-    // 'executable' => BASE_PATH . '/bin/app',
+    'executable' => BASE_PATH . '/bin/app',
     'socket_address' => env('GOTASK_SOCKET_ADDR', \Hyperf\GoTask\ConfigProvider::address()),
     'go2php' => [
         'enable' => true,
@@ -17,8 +16,7 @@ return [
     ],
     'go_build' => [
         'enable' => UtilityHandler::matchEnvi('local') && system('command -v go'),
-        // 「'enable' => env('GOTASK_ENABLE', 1)」時打開注釋
-        // 'workdir' => BASE_PATH . '/gotask',
+        'workdir' => BASE_PATH . '/gotask',
         'command' => 'go build -o ../bin/app cmd/app.go',
     ],
     'go_log' => [
