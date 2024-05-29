@@ -40,6 +40,19 @@ class RedisHandler{
         return json_decode($value, true);
     }
 
+    public static function commonSet(string $redisKey, $value, int $ttl = self::INIT['ttl'])
+    {
+        $Redis = redisInstance();
+        return $Redis->set($redisKey, UtilityHandler::prettyJsonEncode($value), ($ttl === -1 ? null: $ttl));//null表示永不過期，詳情參見set();
+    }
+
+    public static function commonGet(string $redisKey)
+    {
+        $Redis = redisInstance();
+        $value = $Redis->get($redisKey);
+        return json_decode($value, true);
+    }
+
     /**
      * @param callable $func
      * @param string $redisKey
