@@ -38,12 +38,12 @@ trait ResponseTrait
     }
 
     /**
+     * @param string $message
      * @param int $code
-     * @param string $msg
      */
-    protected function fail($code = 120, $msg = 'failure'): JsonResource
+    protected function fail($message = 'failure', $code = 120): JsonResource
     {
-        return (new JsonResource(null))->setAppCode($code)->setMsg($msg);
+        return (new JsonResource(null))->setMsg($message)->setAppCode($code);
     }
 
     /**
