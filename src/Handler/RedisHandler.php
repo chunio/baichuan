@@ -50,7 +50,7 @@ class RedisHandler{
     {
         $Redis = redisInstance();
         $value = $Redis->get($redisKey);
-        if($value === false) return false;
+        if(is_bool($value)) return $value;
         return json_decode($value, true);
     }
 
