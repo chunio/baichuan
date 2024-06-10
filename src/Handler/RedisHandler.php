@@ -224,6 +224,20 @@ class RedisHandler{
         //TODO:檢測全局緩存是否重名
     }
 
-
+    /**
+     * author : zengweitao@gmail.com
+     * date : 2024-06-10 09:50
+     * memo : 冪等請求（idempotent/ˈaɪdəmˌpəʊtənt/），[一般]用於controller
+     */
+    public static function idemExecute(callable $callable, string $auth = '', int $ttl = 3)
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        //$adminInfo = Context::get('adminInfo') ?? [];
+        $parameter = (new \ReflectionFunction($callable))->getStaticVariables();
+        $unique = md5($auth . json_encode($parameter));
+        //example : skeleton:STRING:App\Controller\ApolloController_syncPaddlewaverAdminEnvi_573547d3c28da3f05ff4bee8a5532320
+        $redisKey = 'STRING:' . (isset($trace[1]['class'], $trace[1]['function']) ? ("{$trace[1]['class']}_{$trace[1]['function']}_") : ((string)time() . "_")) . $unique;
+        return self::autoGet($redisKey, $callable, $ttl);
+    }
 
 }
