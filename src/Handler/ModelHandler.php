@@ -36,7 +36,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         $this->model = new $model();
     }
 
-    public function one(array $where, array $select = ['*'], array $group = [], array $order = []): array
+    public function one(array $where, array $select = ['*'], array $group = [], array $order = [])
     {
         $result = $this->commonList($where, $select, $group, $order, 1);
         return $result[0] ?? [];

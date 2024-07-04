@@ -59,3 +59,47 @@ if (!function_exists('kafkaInstance')) {
         return UtilityHandler::di()->get(ProducerManager::class)->getProducer($poolName);
     }
 }
+
+if (!function_exists('ParseVersion')) {
+    /**
+     * @parameter : --
+     * @return : --
+     * author : zengweitao@gmail.com
+     * date : 2024-06-12 14:59
+     * memo : [示例]1.0.0 >> [1,0,0]
+     */
+    function ParseVersion(string $version): array
+    {
+        $array = explode('.', $version);
+        $result = [];
+        foreach ($array as $part) {
+            $result[] = intval($part);
+        }
+        return $result;
+    }
+}
+
+if (!function_exists('CompareVersion')) {
+    /**
+     * @parameter : --
+     * @return : -1 ：v1 < v2，0 ：v1 == v2，1 ：v1 > v2
+     * author : zengweitao@gmail.com
+     * date : 2024-06-12 14:47
+     * memo :
+     */
+    function CompareVersion(string $v1, string $v2) {
+        $version1 = ParseVersion($v1);
+        $version2 = ParseVersion($v2);
+        $maxLength = max(count($version1), count($version2));
+        for ($i = 0; $i < $maxLength; $i++) {
+            $part1 = $version1[$i] ?? 0;
+            $part2 = $version2[$i] ?? 0;
+            if ($part1 < $part2) {
+                return -1;
+            } elseif ($part1 > $part2) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
