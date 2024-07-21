@@ -36,6 +36,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         $this->model = new $model();
     }
 
+    //return/example : Array([0] => stdClass Object([id] => 1,...))
     public function one(array $where, array $select = ['*'], array $group = [], array $order = [])
     {
         $result = $this->commonList($where, $select, $group, $order, 1);
