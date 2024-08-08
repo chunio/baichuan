@@ -79,9 +79,16 @@ class MongoDBHandler
         $pipeline/*管道*/ = $project = $formatGroup = $groupIndex = [];
         if($where) $pipeline[]['$match'] = self::formatWhere($where);
         if($select){
-            $project['_id'] = 0;//默認：返回{$_id}
-            foreach ($select as $unitField){
-                $project[$unitField] = 1;//1表示返回
+            $project['_id'] = 0; //默認：返回{$_id}
+            foreach ($select as $field) {
+                if (strpos($field, ' AS ') !== false) {
+                    //存在别名
+                    list($originalField, $alias) = explode(' AS ', $field);
+                    $project[$alias] = '$' . trim($originalField);
+                } else {
+                    //不帶別名
+                    $project[trim($field)] = 1;//1表示返回
+                }
             }
             $pipeline[]['$project'] = $project;
         }
