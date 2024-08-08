@@ -6,6 +6,7 @@ namespace Baichuan\Library\Handler;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\GoTask\MongoClient\MongoClient;
+use function Hyperf\Config\config;
 
 //TODO:待調試
 class MongoDBHandler
