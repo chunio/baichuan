@@ -39,11 +39,8 @@ class MongoDBHandler
         '=' => '$eq'//使用於$match
     ];
 
-    /**
-     * @Inject()
-     * @var MongoClient
-     */
-    public $MongoClient;
+    #[Inject]
+    public MongoClient $MongoClient;
 
     public function __construct(string $collection, string $db = '')//
     {
