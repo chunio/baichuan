@@ -9,6 +9,7 @@ use Baichuan\Library\Handler\TraceHandler;
 use Baichuan\Library\Handler\UtilityHandler;
 use Hyperf\Kafka\ProducerManager;
 use Hyperf\Redis\RedisFactory;
+use function Hyperf\Support\make;
 
 //if (!function_exists('traceHandler')) {
 //    function traceHandler($variable, string $label = '', string $level = 'info', $monolog = true): bool
