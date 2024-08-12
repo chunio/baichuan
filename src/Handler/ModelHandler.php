@@ -48,8 +48,9 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         array $select = ['*'], //example:['field1', 'field2', ...]
         array $group = [],
         array $order = [], //example:['field1' => 'ASC', 'field2' => 'DESC', ...]
-        int $limit = 0
-    ): array
+        int $limit = 0,
+        bool $buildSql = false
+    )
     {
         $handler = DB::table($this->model->getTable())->select(...$select); // ->where($where);
         foreach ($where as &$value){
@@ -73,7 +74,11 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
                 $handler->orderBy($unitField, $unitSequence);
             }
         }
-        return $handler->get()->toArray();
+        if ($buildSql) {
+            return $handler->toSql();
+        }else{
+            return $handler->get()->toArray();
+        }
     }
 
     public function commonInsert(array $data)/*: int|bool*/
