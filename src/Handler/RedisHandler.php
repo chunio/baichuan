@@ -206,9 +206,9 @@ class RedisHandler{
         return $cacheList;
     }
 
-    public static function matchList(string $keyword): array
+    public static function matchList(string $keyword, string $poolName = 'default'): array
     {
-        $Redis = redisInstance();
+        $Redis = redisInstance($poolName);
         if($cacheList = $Redis->keys("*{$keyword}*")){
             if($cachePrefix = config('redis.default.options.2')){
                 array_walk($cacheList,function(&$value/*, $key*/) use($cachePrefix){
