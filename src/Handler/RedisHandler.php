@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Baichuan\Library\Handler;
 
 use Baichuan\Library\Constant\RedisKeyEnum;
+use function Hyperf\Config\config;
 
 /**
  * Class RedisHandler
