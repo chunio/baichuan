@@ -211,12 +211,11 @@ class RedisHandler{
     {
         $Redis = redisInstance($poolName);
         if($cacheList = $Redis->keys("*{$keyword}*")){
-            if($cachePrefix = config('redis.default.options.2')){
+            if($cachePrefix = config("redis.{$poolName}.options.2")){
                 array_walk($cacheList,function(&$value/*, $key*/) use($cachePrefix){
                     $value = str_replace($cachePrefix,'',$value);
                 });
             }
-
         }
         return $cacheList;
     }
