@@ -29,6 +29,7 @@ class RedisKeyEnum extends AbstractConstants
     ];
 
     public const LIST = [ // 「LIST」conflicts with the system keyword
+        'LIST:MutexResult:' => 'LIST:MutexResult:',//[互斥鎖]結果前綴
     ];
 
     public const SET = [

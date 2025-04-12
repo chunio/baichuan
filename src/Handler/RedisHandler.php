@@ -41,6 +41,51 @@ class RedisHandler{
         return json_decode($value, true);
     }
 
+    public static function SingleFlightGroupGet(string $redisKey, callable $func, int $ttl = self::INIT['ttl'], int $waitTime = 180)
+    {
+        //check[START]
+        $Redis = redisInstance();
+        $value = $Redis->get($redisKey);
+        if ($value !== false) {
+            return json_decode($value, true); //則不觸發「try{...}finally{...}」
+        }
+        //check[END]
+        try {
+            $owner = uniqid('', true);
+            $ttl = ($ttl === -1 ? null : $ttl);
+            $mutexRedisKey = RedisKeyEnum::STRING['STRING:MutexName:'] . $redisKey;
+            $resultRedisKey = RedisKeyEnum::LIST['LIST:MutexResult:'] . $redisKey;
+            if ($Redis->set($mutexRedisKey, $owner, ['EX' => $waitTime, 'NX']) === true) {
+                $result = $func();
+                $resultJson = UtilityHandler::prettyJsonEncode($result);
+                //----------
+                $Pipe = $Redis->pipeline();
+                $Pipe->set($redisKey, $resultJson, $ttl);
+                $Pipe->lPush($resultRedisKey, $resultJson); //共享#並發邏輯#返回值
+                $Pipe->expire($resultRedisKey, $waitTime);
+                $Pipe->exec();
+                //----------
+            } else {
+                if ($resultSlice/* 返回:「含:1鍵名，2鍵值」的索引數組 */ = $Redis->brPop([$resultRedisKey], $waitTime)) { //阻塞，提取#並發邏輯#返回值
+                    $result = json_decode($resultSlice[1], true);
+                    //----------
+                    $Pipe = $Redis->pipeline();
+                    $Pipe->lPush($resultRedisKey, $resultSlice[1]);
+                    $Pipe->expire($resultRedisKey, $waitTime);
+                    $Pipe->exec();
+                    //----------
+                }
+            }
+        }  finally {
+            if (isset($Redis, $owner, $mutexRedisKey)) {
+                //由「$Redis->get($mutexRedisKey)」至「$Redis->del($mutexRedisKey)」的間隙，可能存在並發協程開啟相同的「$mutexRedisKey」任務，因此需要原子操作
+                $lua = "return redis.call('get', KEYS[1]) == ARGV[1] and redis.call('del', KEYS[1]) or 0";
+                $Redis->eval($lua, [$mutexRedisKey, $owner], 1);
+            }
+        }
+        return $result ?? null;
+    }
+
     public static function commonSet(string $redisKey, $value, int $ttl = self::INIT['ttl'])
     {
         $Redis = redisInstance();
