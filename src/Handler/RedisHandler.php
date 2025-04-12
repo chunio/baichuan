@@ -53,8 +53,9 @@ class RedisHandler{
         try {
             $owner = uniqid('', true);
             $ttl = ($ttl === -1 ? null : $ttl);
-            $mutexRedisKey = RedisKeyEnum::STRING['STRING:MutexName:'] . $redisKey;
-            $resultRedisKey = RedisKeyEnum::LIST['LIST:MutexResult:'] . $redisKey;
+            $md5 = md5($redisKey);
+            $mutexRedisKey = RedisKeyEnum::STRING['STRING:MutexName:'] . $md5;
+            $resultRedisKey = RedisKeyEnum::LIST['LIST:MutexResult:'] . $md5;
             if ($Redis->set($mutexRedisKey, $owner, ['EX' => $waitTime, 'NX']) === true) {
                 $result = $func();
                 $resultJson = UtilityHandler::prettyJsonEncode($result);
