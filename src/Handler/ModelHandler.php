@@ -31,8 +31,8 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
 
     public \Hyperf\DbConnection\Model\Model $model;
 
-    //「DB::table($this->model->getTable())」支持複用鏈接
-    //protected string $connectionName;
+    //「DB::connection($this->model->getConnectionName())->table($this->model->getTable())」支持複用鏈接
+    //protected string $connection;
 
     public function __construct(string $model)
     {
@@ -55,7 +55,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         bool $buildSql = false
     )
     {
-        $handler = DB::table($this->model->getTable())->select(...$select); // ->where($where);
+        $handler = DB::connection($this->model->getConnectionName())->table($this->model->getTable())->select(...$select); // ->where($where);
         foreach ($where as &$value){
             [$unitField, $unitOperator, $unitValue] = $value;
             $function = self::$querier[$unitOperator] ?? 'where';
@@ -87,9 +87,9 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
     public function CommonInsert(array $data)/*: int|bool*/
     {
         if(!($data[0] ?? [])){
-            return DB::table($this->model->getTable())->insertGetId($data);
+            return DB::connection($this->model->getConnectionName())->table($this->model->getTable())->insertGetId($data);
         }else{
-            return DB::table($this->model->getTable())->insert($data);
+            return DB::connection($this->model->getConnectionName())->table($this->model->getTable())->insert($data);
         }
     }
 
@@ -103,7 +103,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
      */
     public function CommonUpdate(array $where, array $data): int
     {
-        $handler = DB::table($this->model->getTable());
+        $handler = DB::connection($this->model->getConnectionName())->table($this->model->getTable());
         foreach ($where as &$value){
             [$unitField, $unitOperator, $unitValue] = $value;
             $function = self::$querier[$unitOperator] ?? 'where';
