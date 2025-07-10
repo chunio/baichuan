@@ -48,7 +48,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         array $select = ['*'], //example:['field1', 'field2', ...]
         array $group = [],
         array $order = [], //example:['field1' => 'ASC', 'field2' => 'DESC', ...]
-        int $limit = 0,
+        array $pagination = [], //example:[1/*pageIndex*/, 1000/*pageLimit*/]
         bool $buildSql = false
     )
     {
@@ -67,7 +67,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
             }
         }
         if(isset($whereCondition)) $handler->where($whereCondition);
-        if($limit) $handler->limit($limit);//DEBUG_LABEL
+        if($pagination && $pagination[1] > 0) $handler->forPage($pagination[0] >= 1 ? $pagination[0] : 1, $pagination[1]);
         if($group) $handler->groupBy(...$group);
         if($order) {
             foreach ($order as $unitField => $unitSequence){
