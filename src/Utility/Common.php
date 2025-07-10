@@ -34,9 +34,9 @@ use function Hyperf\Support\make;
 //}
 
 if (!function_exists('modelHandler')) {
-    function modelHandler(string $model, string $connectionName = 'default'): ModelHandler
+    function modelHandler(string $model): ModelHandler
     {
-        return new ModelHandler($model, $connectionName);
+        return new ModelHandler($model);
     }
 }
 
