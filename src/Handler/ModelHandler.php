@@ -40,13 +40,13 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
     }
 
     //return/example : Array([0] => stdClass Object([id] => 1,...))
-    public function One(array $where, array $select = ['*'], array $group = [], array $order = [])
+    public function one(array $where, array $select = ['*'], array $group = [], array $order = [])
     {
         $result = $this->commonList($where, $select, $group, $order, 1);
         return $result[0] ?? [];
     }
 
-    public function CommonList(
+    public function commonList(
         array $where, //example:[['field1', '=', 'value1'], ['field2', '<=', 'value2'], ['field2', '>=', 'value3'], ['field3', 'IN', 'value4List']]
         array $select = ['*'], //example:['field1', 'field2', ...]
         array $group = [],
@@ -84,7 +84,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         }
     }
 
-    public function CommonInsert(array $data)/*: int|bool*/
+    public function commonInsert(array $data)/*: int|bool*/
     {
         if(!($data[0] ?? [])){
             return DB::connection($this->model->getConnectionName())->table($this->model->getTable())->insertGetId($data);
@@ -101,7 +101,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
      * datetime: 2023/03/02 22:20
      * memo : 返回改變行數
      */
-    public function CommonUpdate(array $where, array $data): int
+    public function commonUpdate(array $where, array $data): int
     {
         $handler = DB::connection($this->model->getConnectionName())->table($this->model->getTable());
         foreach ($where as &$value){
