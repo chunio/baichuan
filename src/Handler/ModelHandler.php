@@ -31,9 +31,12 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
 
     public \Hyperf\DbConnection\Model\Model $model;
 
-    public function __construct(string $model)
+    protected string $connectionName;
+
+    public function __construct(string $model, string $connectionName = 'default')
     {
         $this->model = new $model();
+        $this->connectionName = $connectionName;
     }
 
     //return/example : Array([0] => stdClass Object([id] => 1,...))
@@ -52,7 +55,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         bool $buildSql = false
     )
     {
-        $handler = DB::table($this->model->getTable())->select(...$select); // ->where($where);
+        $handler = DB::connection($this->connectionName)->table($this->model->getTable())->select(...$select); // ->where($where);
         foreach ($where as &$value){
             [$unitField, $unitOperator, $unitValue] = $value;
             $function = self::$querier[$unitOperator] ?? 'where';
@@ -84,9 +87,9 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
     public function commonInsert(array $data)/*: int|bool*/
     {
         if(!($data[0] ?? [])){
-            return DB::table($this->model->getTable())->insertGetId($data);
+            return DB::connection($this->connectionName)->table($this->model->getTable())->insertGetId($data);
         }else{
-            return DB::table($this->model->getTable())->insert($data);
+            return DB::connection($this->connectionName)->table($this->model->getTable())->insert($data);
         }
     }
 
@@ -100,7 +103,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
      */
     public function commonUpdate(array $where, array $data): int
     {
-        $handler = DB::table($this->model->getTable());
+        $handler = DB::connection($this->connectionName)->table($this->model->getTable());
         foreach ($where as &$value){
             [$unitField, $unitOperator, $unitValue] = $value;
             $function = self::$querier[$unitOperator] ?? 'where';
