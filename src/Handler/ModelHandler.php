@@ -31,6 +31,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
 
     public \Hyperf\DbConnection\Model\Model $model;
 
+    //「DB::connection($this->connectionName)->table($this->model->getTable())」支持複用鏈接
     protected string $connectionName;
 
     public function __construct(string $model, string $connectionName = 'default')
