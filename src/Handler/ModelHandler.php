@@ -121,4 +121,24 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         return $handler->update($data);
     }
 
+    public function commonDelete(array $where): int
+    {
+        $handler = DB::connection($this->model->getConnectionName())->table($this->model->getTable());
+        foreach ($where as &$value){
+            [$unitField, $unitOperator, $unitValue] = $value;
+            $function = self::$querier[$unitOperator] ?? 'where';
+            switch ($function) {
+                case 'where':
+                    $whereCondition[] = $value;
+                    break;
+                case 'whereIn':
+                case 'whereNotIn':
+                    $handler = $handler->{$function}(...[$unitField, $unitValue]);
+                    break;
+            }
+        }
+        if(isset($whereCondition)) $handler->where($whereCondition);
+        return $handler->delete();
+    }
+
 }
