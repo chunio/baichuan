@@ -84,12 +84,14 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         }
     }
 
-    public function commonInsert(array $data)/*: int|bool*/
+    public function commonInsert(array $data, bool $insertOrIgnore = false)/*: int|bool*/
     {
+        $connection = DB::connection($this->model->getConnectionName());
+        $table = $connection->table($this->model->getTable());
         if(!($data[0] ?? [])){
-            return DB::connection($this->model->getConnectionName())->table($this->model->getTable())->insertGetId($data);
-        }else{
-            return DB::connection($this->model->getConnectionName())->table($this->model->getTable())->insert($data);
+            return $insertOrIgnore ? ($table->insertOrIgnore($data) ? $this->getLastInsertId($connection) : false) : $table->insertGetId($data);
+        } else {
+            return $insertOrIgnore ? $table->insertOrIgnore($data) : $table->insert($data);
         }
     }
 
