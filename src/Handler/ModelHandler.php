@@ -89,7 +89,7 @@ class ModelHandler //extends \Hyperf\DbConnection\Model\Model
         $connection = DB::connection($this->model->getConnectionName());
         $table = $connection->table($this->model->getTable());
         if(!($data[0] ?? [])){
-            return $insertOrIgnore ? ($table->insertOrIgnore($data) ? $connection->getPdo()->lastInsertId() : false) : $table->insertGetId($data);
+            return $insertOrIgnore ? ($table->insertOrIgnore($data) ? $connection->getPdo()->lastInsertId()/*TODO:待驗證*/ : false) : $table->insertGetId($data);
         } else {
             return $insertOrIgnore ? $table->insertOrIgnore($data) : $table->insert($data);
         }
