@@ -22,6 +22,7 @@ class RedisKeyEnum extends AbstractConstants
         'STRING:BookShelfList:' => 'STRING:PthreadCondInt:',//[互斥鎖？]條件變量
         'STRING:ApiElapsedTimeRank:Second:' => 'STRING:ApiElapsedTimeRank:Second:',//[API耗時排行]時間
         'STRING:ApiElapsedTimeRank:Num:' => 'STRING:ApiElapsedTimeRank:Num:',//[API耗時排行]次數
+        'STRING:CommonHttpGet:' => 'STRING:CommonHttpGet:',//UtilityHandler::commonHttpGet()
     ];
 
     public const HASH = [

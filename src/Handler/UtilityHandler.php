@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Baichuan\Library\Handler;
 
 use Baichuan\Library\Constant\AsciiEnum;
+use Baichuan\Library\Constant\RedisKeyEnum;
 use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Hyperf\Context\ApplicationContext;
+use Hyperf\Redis\Redis;
 use function Hyperf\Support\env;
 
 /**
@@ -106,15 +108,17 @@ class UtilityHandler
         return $return;
     }
 
-    public static function commonHttpGet(string $uri, array $query = [], array $cookieDetail = [], string $cookieDomain = '')
+    public static function commonHttpGet(string $uri, array $query = [], array $cookieDetail = [], string $cookieDomain = '', int $timeout = 5, int $ttl = 0/*緩存時間*/)
     {
         try{
+            $redisKey = RedisKeyEnum::STRING['STRING:CommonHttpGet:'] . md5(igbinary_serialize([$uri, $query, $cookieDetail, $cookieDomain]));
+            if ($ttl && ($return = RedisHandler::commonGet($redisKey))) return $return;
             $config = [
                 //TODO：[開啟報錯]NOTICE Socket::ssl_verify() (ERRNO 1014): can not verify peer from fd#17 with error#20: unable to get local issuer certificate
                 //'verify' => true
                 'verify' => false,
                 'query' => $query,
-                'timeout' => 5,
+                'timeout' => $timeout,
             ];
             if($cookieDetail && $cookieDomain){
                 $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
@@ -125,6 +129,7 @@ class UtilityHandler
                 'status' => true,
                 'body' => $body
             ];
+            if ($ttl) RedisHandler::commonSet($redisKey, $return, $ttl);
         }catch (\Throwable $e){
             // 異常原因：1連接超時，...
             $return = [
