@@ -41,6 +41,28 @@ class RedisHandler{
         return json_decode($value, true);
     }
 
+    /**
+     * @param callable $func
+     * @param string $redisKey
+     * @param int $ttl -1/永不過期
+     * @return mixed
+     * author : zengweitao@gmail.com
+     * datetime: 2025/07/13 11:53
+     * memo : null
+     */
+    public static function AutoIgbinaryGet(string $cacheKey, callable $func, int $ttl = self::INIT['ttl'])
+    {
+        $redisInstance = redisInstance();
+        $value = $redisInstance->get($cacheKey);
+        if ($value === false) {
+            $value = $func();
+            $redisInstance->set($cacheKey, igbinary_serialize($value), ($ttl === -1 ? null: $ttl));//「null」表示永不過期，詳情參見「set()」
+            return $value;
+        }
+        return igbinary_unserialize($value);
+    }
+
+
     public static function SingleFlightGroupGet(string $redisKey, callable $func, int $ttl = self::INIT['ttl'], int $waitTime = 180)
     {
         //check[START]
