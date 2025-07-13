@@ -23,27 +23,6 @@ class RedisHandler{
     /**
      * @param callable $func
      * @param string $redisKey
-     * @param int $ttl -1/永不過期
-     * @return mixed
-     * author : zengweitao@gmail.com
-     * datetime: 2023/02/20 11:53
-     * memo : null
-     */
-    public static function autoGet(string $redisKey, callable $func, int $ttl = self::INIT['ttl'])
-    {
-        $Redis = redisInstance();
-        $value = $Redis->get($redisKey);
-        if ($value === false) {
-            $value = $func();
-            $Redis->set($redisKey, UtilityHandler::prettyJsonEncode($value), ($ttl === -1 ? null: $ttl));//null表示永不過期，詳情參見set();
-            return $value;
-        }
-        return json_decode($value, true);
-    }
-
-    /**
-     * @param callable $func
-     * @param string $redisKey
      * @param int $ttl 0/無需緩存，-1/永不過期
      * @return mixed
      * author : zengweitao@gmail.com
@@ -63,6 +42,17 @@ class RedisHandler{
         return igbinary_unserialize($value);
     }
 
+    public static function IgbinarySet(string $redisKey, $value, int $ttl = self::INIT['ttl'])
+    {
+        return redisInstance()->set($redisKey, igbinary_serialize($value), ($ttl === -1 ? null/*「null」表示永不過期，詳情參見「set()」*/: $ttl));
+    }
+
+    public static function IgbinaryGet(string $redisKey)
+    {
+        $value = redisInstance()->get($redisKey);
+        if($value === false) return false;
+        return igbinary_unserialize($value);
+    }
 
     public static function SingleFlightGroupGet(string $redisKey, callable $func, int $ttl = self::INIT['ttl'], int $waitTime = 180)
     {
@@ -108,6 +98,27 @@ class RedisHandler{
             }
         }
         return $result ?? null;
+    }
+
+    /**
+     * @param callable $func
+     * @param string $redisKey
+     * @param int $ttl -1/永不過期
+     * @return mixed
+     * author : zengweitao@gmail.com
+     * datetime: 2023/02/20 11:53
+     * memo : null
+     */
+    public static function autoGet(string $redisKey, callable $func, int $ttl = self::INIT['ttl'])
+    {
+        $Redis = redisInstance();
+        $value = $Redis->get($redisKey);
+        if ($value === false) {
+            $value = $func();
+            $Redis->set($redisKey, UtilityHandler::prettyJsonEncode($value), ($ttl === -1 ? null: $ttl));//null表示永不過期，詳情參見set();
+            return $value;
+        }
+        return json_decode($value, true);
     }
 
     public static function commonSet(string $redisKey, $value, int $ttl = self::INIT['ttl'])
