@@ -44,7 +44,7 @@ class RedisHandler{
     /**
      * @param callable $func
      * @param string $redisKey
-     * @param int $ttl -1/永不過期
+     * @param int $ttl 0/無需緩存，-1/永不過期
      * @return mixed
      * author : zengweitao@gmail.com
      * datetime: 2025/07/13 11:53
@@ -52,6 +52,7 @@ class RedisHandler{
      */
     public static function AutoIgbinaryGet(string $cacheKey, callable $func, int $ttl = self::INIT['ttl'])
     {
+        if ($ttl === 0) return $func;
         $redisInstance = redisInstance();
         $value = $redisInstance->get($cacheKey);
         if ($value === false) {
