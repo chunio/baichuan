@@ -57,7 +57,7 @@ class RedisHandler{
         $value = $redisInstance->get($cacheKey);
         if ($value === false) {
             $value = $func();
-            $redisInstance->set($cacheKey, igbinary_serialize($value), ($ttl === -1 ? null: $ttl));//「null」表示永不過期，詳情參見「set()」
+            $redisInstance->set($cacheKey, igbinary_serialize($value), ($ttl === -1 ? null/*「null」表示永不過期，詳情參見「set()」*/: $ttl));
             return $value;
         }
         return igbinary_unserialize($value);
