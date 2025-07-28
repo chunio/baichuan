@@ -81,7 +81,7 @@ class UtilityHandler
         return json_decode((string)$stream,true) ?? [];
     }
 
-    public static function commonHttpPost(string $uri, array $body = [], $header = ['Content-Type' => 'application/json'], array $cookieDetail = [], string $cookieDomain = '')
+    public static function commonHttpPost(string $uri, array $request = [], $header = ['Content-Type' => 'application/json'], array $cookieDetail = [], string $cookieDomain = '')
     {
         try{
             $config = [
@@ -89,17 +89,23 @@ class UtilityHandler
                 //'verify' => true
                 'verify' => false,
                 'headers' => $header,
-                'json' => $body,
                 'timeout' => 3,
             ];
             if($cookieDetail && $cookieDomain){
                 $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
             }
+            switch ($header['Content-Type'] ?? ''){
+                case 'application/x-www-form-urlencoded':
+                    $config['form_params'] = $request;
+                    break;
+                default:
+                    $config['json'] = $request;
+            }
             $client = new \GuzzleHttp\Client($config);
-            $body = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
+            $response = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
             $return = [
                 'status' => true,
-                'body' => $body
+                'body' => $response
             ];
         }catch (\Throwable $e){
             // 異常原因：1連接超時，...
