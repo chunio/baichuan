@@ -85,9 +85,12 @@ class UtilityHandler
     {
         try{
             $config = [
-                'timeout' => 3,
+                //TODO：[開啟報錯]NOTICE Socket::ssl_verify() (ERRNO 1014): can not verify peer from fd#17 with error#20: unable to get local issuer certificate
+                //'verify' => true
+                'verify' => false,
                 'headers' => $header,
                 'json' => $body,
+                'timeout' => 3,
             ];
             if($cookieDetail && $cookieDomain){
                 $config['cookies'] = CookieJar::fromArray($cookieDetail, $cookieDomain);
