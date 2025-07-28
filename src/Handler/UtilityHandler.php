@@ -81,7 +81,7 @@ class UtilityHandler
         return json_decode((string)$stream,true) ?? [];
     }
 
-    public static function commonHttpPost(string $uri, array $request = [], $header = ['Content-Type' => 'application/json'], array $cookieDetail = [], string $cookieDomain = '')
+    public static function commonHttpPost(string $uri, array $body = [], $header = ['Content-Type' => 'application/json'], array $cookieDetail = [], string $cookieDomain = '')
     {
         try{
             $config = [
@@ -96,10 +96,10 @@ class UtilityHandler
             }
             switch ($header['Content-Type'] ?? ''){
                 case 'application/x-www-form-urlencoded':
-                    $config['form_params'] = $request;
+                    $config['form_params'] = $body;
                     break;
                 default:
-                    $config['json'] = $request;
+                    $config['json'] = $body;
             }
             $client = new \GuzzleHttp\Client($config);
             $response = json_decode((string)$client->request('POST', $uri, $config)->getBody(), true);
